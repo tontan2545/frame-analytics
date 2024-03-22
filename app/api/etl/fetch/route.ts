@@ -11,6 +11,21 @@ export async function GET(request: NextRequest) {
     throw new Error("NEYNAR_API_KEY is not set");
   }
 
+  if (
+    request.headers.get("Authorization") !==
+      `Bearer ${process.env.CRON_SECRET}` &&
+    process.env.MODE !== "development"
+  ) {
+    return Response.json(
+      {
+        message: "Unauthorized xD",
+      },
+      {
+        status: 401,
+      }
+    );
+  }
+
   const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
   const latestFrameTimestamp = await sql`
