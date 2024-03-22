@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
+import Header from "@/components/header";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,12 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "w-full h-full overscroll-y-none")}>
-        <div className="flex justify-between">
-          <p>Logo</p>
-          <p>Search</p>
-          <p>Dunno</p>
-        </div>
+      <body
+        className={cn(inter.className, "dark w-full h-full overscroll-y-none")}
+      >
+        <Header />
         {children}
       </body>
     </html>
