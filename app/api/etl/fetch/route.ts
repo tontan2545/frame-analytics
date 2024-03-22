@@ -2,9 +2,9 @@ import sql from "@/lib/postgres";
 import { NeynarAPIClient } from "@neynar/nodejs-sdk";
 import axios from "axios";
 import { type NextRequest } from "next/server";
+import _ from "lodash";
 
 const WARPCAST_URL = "https://client.warpcast.com/v2/cast";
-///v2/cast?hash=0x577bec62a9448a434a3d28613e31cf846234314d
 
 export async function GET(request: NextRequest) {
   if (!process.env.NEYNAR_API_KEY) {
@@ -48,7 +48,18 @@ export async function GET(request: NextRequest) {
 
         return {
           hash: cast.hash, // string
-          author: JSON.stringify(cast.author), // JSON
+          author: JSON.stringify(
+            _.omit(cast.author, [
+              "object",
+              "custody_address",
+              "verifications",
+              "verified_addresses",
+              "active_status",
+              "viewer_context",
+              "follower_count",
+              "following_count",
+            ])
+          ), // JSON
           embeds: JSON.stringify(cast.embeds), // JSON
           frames: JSON.stringify(cast.frames), // JSON
           parent_hash: cast.parent_hash, // string | null
