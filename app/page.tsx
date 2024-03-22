@@ -1,3 +1,4 @@
+import FramePreview from "@/components/frame-preview";
 import { Scan } from "lucide-react";
 
 export default function Home() {
@@ -14,17 +15,12 @@ export default function Home() {
           <h2>Discover the latest curated frames created by our community.</h2>
         </div>
         <div className="grid grid-cols-3 gap-5">
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
-          <div className="aspect-video bg-secondary rounded-lg w-full" />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
         </div>
       </div>
     </main>
