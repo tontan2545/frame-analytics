@@ -1,5 +1,6 @@
 import FramePreview from "@/components/frame-preview";
 import { Scan } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -15,6 +16,12 @@ export default function Home() {
           <h2>Discover the latest curated frames created by our community.</h2>
         </div>
         <div className="grid grid-cols-3 gap-5">
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
+          <FramePreview title="frame.xyz" viewCount={100} />
           <FramePreview title="frame.xyz" viewCount={100} />
           <FramePreview title="frame.xyz" viewCount={100} />
           <FramePreview title="frame.xyz" viewCount={100} />
