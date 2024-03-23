@@ -6,8 +6,8 @@ export default function ExamplesIndexPage() {
       <b>Frames from FramesHub</b>
       <ul>
         <li>
-          <Link className="underline" href="/frame/trending">
-            Trending
+          <Link className="underline" href="/frame/trending/frames">
+            Trending Frames
           </Link>
         </li>
         {/* <li>

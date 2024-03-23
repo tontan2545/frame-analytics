@@ -1,11 +1,22 @@
 /* eslint-disable react/jsx-key */
+import { ClientProtocolId } from "frames.js";
 import { createFrames, Button } from "frames.js/next";
-
+import { getXmtpFrameMessage, isXmtpFrameActionPayload } from "frames.js/xmtp";
 const totalPages = 5;
 
 const frames = createFrames({
   basePath: "/frame/trending/frames",
 });
+const acceptedProtocols: ClientProtocolId[] = [
+  {
+    id: "xmtp",
+    version: "vNext",
+  },
+  {
+    id: "farcaster",
+    version: "vNext",
+  },
+];
 
 const handleRequest = frames((async (ctx: any) => {
   const pageIndex = Number(ctx.searchParams.pageIndex || 0);
@@ -24,6 +35,7 @@ const handleRequest = frames((async (ctx: any) => {
           Go
         </Button>,
       ],
+      accepts: acceptedProtocols,
     };
   }
 
@@ -71,7 +83,9 @@ const handleRequest = frames((async (ctx: any) => {
       </div>
     ),
     buttons: buttons,
+    accepts: acceptedProtocols,
   };
 }) as any);
 
 export const POST = handleRequest;
+export const GET = handleRequest;

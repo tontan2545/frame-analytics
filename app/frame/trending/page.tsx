@@ -10,20 +10,23 @@ export async function generateMetadata(): Promise<Metadata> {
     description: "Discover these trending frames created by our community.",
     other: {
       ...(await fetchMetadata(
-        new URL("/frame/trending", vercelURL() || "http://localhost:3000")
+        new URL(
+          "/frame/trending/frames",
+          vercelURL() || "http://localhost:3000"
+        )
       )),
     },
   };
 }
 
 export default async function Home() {
-  const url = currentURL("/frame/trending");
+  const url = currentURL("/frame/trending/frames");
 
   return (
-    <div>
-      Multi-page example
-      <Link href={createDebugUrl(url)} className="underline">
-        Debug
+    <div className="p-2 flex flex-col gap-2">
+      Trending frames
+      <Link href={url.toString()} className="underline">
+        {url.toString()}
       </Link>
     </div>
   );
