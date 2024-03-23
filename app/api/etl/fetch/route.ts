@@ -1,16 +1,12 @@
-import sql from "@/lib/postgres";
-import { NeynarAPIClient } from "@neynar/nodejs-sdk";
+import sql from "@/server/lib/postgres";
 import axios from "axios";
 import { type NextRequest } from "next/server";
 import _ from "lodash";
+import neynarClient from "@/server/lib/neynar";
 
 const WARPCAST_URL = "https://client.warpcast.com/v2/cast";
 
 export async function GET(request: NextRequest) {
-  if (!process.env.NEYNAR_API_KEY) {
-    throw new Error("NEYNAR_API_KEY is not set");
-  }
-
   if (
     request.headers.get("Authorization") !==
       `Bearer ${process.env.CRON_SECRET}` &&
@@ -25,8 +21,6 @@ export async function GET(request: NextRequest) {
       }
     );
   }
-
-  const neynarClient = new NeynarAPIClient(process.env.NEYNAR_API_KEY);
 
   const latestFrameTimestamp = await sql`
     SELECT timestamp FROM frames ORDER BY timestamp DESC LIMIT 1
