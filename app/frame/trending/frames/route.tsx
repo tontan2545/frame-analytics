@@ -3,10 +3,30 @@ import { ClientProtocolId } from "frames.js";
 import { createFrames, Button } from "frames.js/next";
 import { getXmtpFrameMessage, isXmtpFrameActionPayload } from "frames.js/xmtp";
 import { currentURL } from "../../utils";
+import { openframes } from "frames.js/middleware";
 const totalPages = 5;
 
 const frames = createFrames({
   basePath: "/frame/trending/frames",
+  middleware: [
+    openframes({
+      clientProtocol: {
+        id: "xmtp",
+        version: "2024-02-09",
+      },
+      handler: {
+        isValidPayload: (body: JSON) => isXmtpFrameActionPayload(body),
+        getFrameMessage: async (body: JSON) => {
+          if (!isXmtpFrameActionPayload(body)) {
+            return undefined;
+          }
+          const result = await getXmtpFrameMessage(body);
+
+          return { ...result };
+        },
+      },
+    }),
+  ],
 });
 const acceptedProtocols: ClientProtocolId[] = [
   {
