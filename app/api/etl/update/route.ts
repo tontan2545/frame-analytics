@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
   let i = 0;
   const updated = await Promise.all(
-    _.chunk(allFrames, 350).map(async (frames) => {
+    _.chunk(allFrames, 250).map(async (frames) => {
       const casts = await neynarClient.fetchBulkCasts(
         frames.map((e) => e.hash)
       );
