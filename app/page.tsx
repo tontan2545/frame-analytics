@@ -1,8 +1,9 @@
-import FramePreview from "@/components/frame-preview";
+import TrendingFrames from "@/components/trending-frames";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Scan } from "lucide-react";
-import Image from "next/image";
+import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main className="px-40 py-20">
       <div className="space-y-8">
@@ -16,18 +17,20 @@ export default function Home() {
           <h2>Discover the latest curated frames created by our community.</h2>
         </div>
         <div className="grid grid-cols-3 gap-5">
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
-          <FramePreview title="frame.xyz" viewCount={100} />
+          <Suspense
+            fallback={
+              <>
+                {Array.from({ length: 6 }).map(() => (
+                  <Skeleton
+                    key="trending-skeleton"
+                    className="w-full h-60 rounded-md"
+                  />
+                ))}
+              </>
+            }
+          >
+            <TrendingFrames />
+          </Suspense>
         </div>
       </div>
     </main>
