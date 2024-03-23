@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.18",
+    "@headlessui/tailwindcss": "^0.2.0",
     "@neynar/nodejs-sdk": "^1.13.1",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-slot": "^1.0.2",
+    "@remixicon/react": "^4.2.0",
+    "@tremor/react": "^3.14.1",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -27,6 +31,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20",
     "@types/react": "^18",
