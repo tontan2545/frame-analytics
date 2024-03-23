@@ -3,13 +3,16 @@ import { type NextRequest } from "next/server";
 import _ from "lodash";
 
 export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const hour = Number(url.searchParams.get("hour")) || 24;
+  const interval = `${hour} hour`;
   const trendingFrames: FrameRowWithStats[] = await sql`
     SELECT DISTINCT ON (sub.hash) sub.hash, sub.author, sub.embeds, sub.frames, sub.timestamp, sub.text, sub.likes, sub.replies, sub.recasts
     FROM (
         SELECT frames.hash, frames.author, frames.embeds, frames.frames, frames.timestamp, frames.text, stats.likes, stats.replies, stats.recasts
         FROM frames
         JOIN stats ON frames.hash = stats.hash
-        WHERE frames.timestamp > NOW() - INTERVAL '1 day'
+        WHERE frames.timestamp > NOW() - INTERVAL '1 hour' * ${hour}
         AND frames.frames IS NOT NULL
         ORDER BY stats.likes + stats.replies + stats.recasts DESC
         LIMIT 20
@@ -18,7 +21,7 @@ export async function GET(request: NextRequest) {
     LIMIT 5
     `;
 
-  const response = [];
+  const response: FrameRowWithStatsResponse[] = [];
   for (const frame of trendingFrames) {
     const author: Author = JSON.parse(frame.author);
     const embeds: Embed[] = JSON.parse(frame.embeds);

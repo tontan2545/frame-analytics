@@ -47,3 +47,10 @@ interface FrameRowWithStats extends FrameRow {
   recasts: number;
   replies: number;
 }
+
+interface FrameRowWithStatsResponse
+  extends Omit<FrameRowWithStats, "author" | "embeds" | "frames"> {
+  author: Author;
+  embeds: Embed[];
+  frames: Frame[];
+}
