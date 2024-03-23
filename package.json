@@ -16,6 +16,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@remixicon/react": "^4.2.0",
     "@tremor/react": "^3.14.1",
+    "@xmtp/frames-validator": "^0.5.2",
     "axios": "^1.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
