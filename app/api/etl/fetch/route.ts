@@ -1,15 +1,12 @@
 import sql from "@/server/lib/postgres";
-import axios from "axios";
 import { type NextRequest } from "next/server";
 import _ from "lodash";
 import neynarClient from "@/server/lib/neynar";
 
-const WARPCAST_URL = "https://client.warpcast.com/v2/cast";
-
 export async function GET(request: NextRequest) {
   if (
     request.headers.get("Authorization") !==
-      `Bearer ${process.env.CRON_SECRET}` &&
+      `Bearer ${process.env.CRON_ORG_SECRET}` &&
     process.env.MODE !== "development"
   ) {
     return Response.json(
@@ -30,58 +27,45 @@ export async function GET(request: NextRequest) {
     limit: 100,
   });
 
-  const casts = feed.casts
-    .filter((c) => {
-      return (
-        !latestFrameTimestamp || new Date(c.timestamp) > latestFrameTimestamp
-      );
-    })
-    .map((cast) => {
-      return {
-        hash: cast.hash, // string
-        author: JSON.stringify(
-          _.omit(cast.author, [
-            "object",
-            "custody_address",
-            "verifications",
-            "verified_addresses",
-            "active_status",
-            "viewer_context",
-            "follower_count",
-            "following_count",
-          ])
-        ), // JSON
-        embeds: JSON.stringify(cast.embeds), // JSON
-        frames: JSON.stringify(cast.frames), // JSON
-        parent_hash: cast.parent_hash, // string | null
-        timestamp: cast.timestamp, // string
-        text: cast.text, // string
-      };
-    });
+  const filteredCasts = feed.casts.filter((c) => {
+    return (
+      !latestFrameTimestamp || new Date(c.timestamp) > latestFrameTimestamp
+    );
+  });
+  const casts = filteredCasts.map((cast) => {
+    return {
+      hash: cast.hash, // string
+      author: JSON.stringify(
+        _.omit(cast.author, [
+          "object",
+          "custody_address",
+          "verifications",
+          "verified_addresses",
+          "active_status",
+          "viewer_context",
+          "follower_count",
+          "following_count",
+        ])
+      ), // JSON
+      embeds: JSON.stringify(cast.embeds), // JSON
+      frames: JSON.stringify(cast.frames), // JSON
+      parent_hash: cast.parent_hash, // string | null
+      timestamp: cast.timestamp, // string
+      text: cast.text, // string
+    };
+  });
 
-  const stats = await Promise.all(
-    casts.map(async (cast) => {
-      const response = await axios
-        .get(`${WARPCAST_URL}?hash=${cast.hash}`)
-        .then((res) => res.data.result?.cast);
+  const now = new Date().toISOString();
 
-      if (response?.error) {
-        console.error("Error fetching reactions", response.error);
-      }
-
-      return {
-        hash: cast.hash,
-        timestamp: cast.timestamp,
-        replies: response?.replies?.count || 0,
-        recasts: response?.recasts?.count || 0,
-        reactions: response?.reactions?.count || 0,
-        watches: response?.watches?.count || 0,
-        views: response?.viewCount || 0,
-        quotes: response?.quoteCount || 0,
-        combined_recasts: response?.combinedRecasts || 0,
-      };
-    })
-  );
+  const stats = filteredCasts.map((cast) => {
+    return {
+      hash: cast.hash,
+      timestamp: now,
+      replies: cast.replies.count || 0,
+      recasts: cast.reactions.recasts.length || 0,
+      likes: cast.reactions.likes.length || 0,
+    };
+  });
 
   await Promise.all([
     sql`
