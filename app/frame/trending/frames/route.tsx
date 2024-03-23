@@ -7,7 +7,7 @@ const frames = createFrames({
   basePath: "/frame/trending/frames",
 });
 
-const handleRequest = frames(async (ctx) => {
+const handleRequest = frames((async (ctx: any) => {
   const pageIndex = Number(ctx.searchParams.pageIndex || 0);
 
   if (pageIndex === 0) {
@@ -72,6 +72,6 @@ const handleRequest = frames(async (ctx) => {
     ),
     buttons: buttons,
   };
-});
+}) as any);
 
 export const POST = handleRequest;
