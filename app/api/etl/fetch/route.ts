@@ -22,57 +22,75 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const latestFrameTimestamp = await sql`
+  const latestFrameTimestamp: Date | null = await sql`
     SELECT timestamp FROM frames ORDER BY timestamp DESC LIMIT 1
-  `.then((res) => new Date(res[0].timestamp));
+  `.then((res) => res?.[0]?.timestamp);
 
   const feed = await neynarClient.fetchFramesOnlyFeed({
     limit: 100,
   });
 
-  const casts = await Promise.all(
-    feed.casts
-      .filter((c) => {
-        return new Date(c.timestamp) > latestFrameTimestamp;
-      })
-      .map(async (cast) => {
-        const response = await axios
-          .get(`${WARPCAST_URL}?hash=${cast.hash}`)
-          .then((res) => res.data.result?.cast);
+  const casts = feed.casts
+    .filter((c) => {
+      return (
+        !latestFrameTimestamp || new Date(c.timestamp) > latestFrameTimestamp
+      );
+    })
+    .map((cast) => {
+      return {
+        hash: cast.hash, // string
+        author: JSON.stringify(
+          _.omit(cast.author, [
+            "object",
+            "custody_address",
+            "verifications",
+            "verified_addresses",
+            "active_status",
+            "viewer_context",
+            "follower_count",
+            "following_count",
+          ])
+        ), // JSON
+        embeds: JSON.stringify(cast.embeds), // JSON
+        frames: JSON.stringify(cast.frames), // JSON
+        parent_hash: cast.parent_hash, // string | null
+        timestamp: cast.timestamp, // string
+        text: cast.text, // string
+      };
+    });
 
-        return {
-          hash: cast.hash, // string
-          author: JSON.stringify(
-            _.omit(cast.author, [
-              "object",
-              "custody_address",
-              "verifications",
-              "verified_addresses",
-              "active_status",
-              "viewer_context",
-              "follower_count",
-              "following_count",
-            ])
-          ), // JSON
-          embeds: JSON.stringify(cast.embeds), // JSON
-          frames: JSON.stringify(cast.frames), // JSON
-          parent_hash: cast.parent_hash, // string | null
-          timestamp: cast.timestamp, // string
-          text: cast.text, // string
-          replies: response?.replies?.count || 0,
-          recasts: response?.recasts?.count || 0,
-          reactions: response?.reactions?.count || 0,
-          watches: response?.watches?.count || 0,
-          views: response?.viewCount || 0,
-          quotes: response?.quoteCount || 0,
-          combined_recasts: response?.combinedRecasts || 0,
-        };
-      })
+  const stats = await Promise.all(
+    casts.map(async (cast) => {
+      const response = await axios
+        .get(`${WARPCAST_URL}?hash=${cast.hash}`)
+        .then((res) => res.data.result?.cast);
+
+      if (response?.error) {
+        console.error("Error fetching reactions", response.error);
+      }
+
+      return {
+        hash: cast.hash,
+        timestamp: cast.timestamp,
+        replies: response?.replies?.count || 0,
+        recasts: response?.recasts?.count || 0,
+        reactions: response?.reactions?.count || 0,
+        watches: response?.watches?.count || 0,
+        views: response?.viewCount || 0,
+        quotes: response?.quoteCount || 0,
+        combined_recasts: response?.combinedRecasts || 0,
+      };
+    })
   );
 
-  await sql`
+  await Promise.all([
+    sql`
   INSERT INTO frames ${sql(casts)} ON CONFLICT DO NOTHING
-  `.execute();
+  `.execute(),
+    sql`
+  INSERT INTO stats ${sql(stats)} ON CONFLICT DO NOTHING
+  `.execute(),
+  ]);
 
   return Response.json({
     message: `Inserted ${casts.length} frames`,
