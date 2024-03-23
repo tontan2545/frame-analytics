@@ -21,6 +21,7 @@ const frames = createFrames({
             return undefined;
           }
           const result = await getXmtpFrameMessage(body);
+          console.log("result: ", result);
 
           return { ...result };
         },
@@ -45,6 +46,11 @@ const handleRequest = frames((async (ctx: any) => {
   let queriedData: string | FrameRowWithStatsResponse[] =
     ctx.searchParams.queriedData || null;
 
+  if (ctx.message) {
+    console.log("XMTP Client");
+    console.log(ctx.message);
+    const { frameUrl, buttonIndex } = ctx.message;
+  }
   if (pageIndex === 0) {
     return {
       image: (
