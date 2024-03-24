@@ -37,7 +37,9 @@ const Search = (props: Props) => {
         className="w-96 justify-between px-2"
         onClick={() => setOpen(true)}
       >
-        <p className="font-light text-primary/70 ml-3">Search frames</p>
+        <p className="font-light text-secondary-foreground/70 ml-3">
+          Search frames
+        </p>
         <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-xs">⌘</span>J
         </kbd>

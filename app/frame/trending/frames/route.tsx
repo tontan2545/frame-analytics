@@ -43,7 +43,7 @@ const acceptedProtocols: ClientProtocolId[] = [
 const handleRequest = frames((async (ctx: any) => {
   const pageIndex = Number(ctx.searchParams.pageIndex || 0);
   const hour = Number(ctx.searchParams.hour || 24);
-  let queriedData: string | FrameRowWithStatsResponse[] =
+  let queriedData: string | FrameRowWithStats[] =
     ctx.searchParams.queriedData || null;
 
   if (ctx.message) {

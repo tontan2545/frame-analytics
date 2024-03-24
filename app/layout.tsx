@@ -23,6 +23,7 @@ export default function RootLayout({
         className={cn(inter.className, "dark w-full h-full overscroll-y-none")}
       >
         <Header />
+
         {children}
       </body>
     </html>
