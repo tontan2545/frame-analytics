@@ -1,3 +1,5 @@
+export const maxDuration = 300;
+
 import RecentFrames from "@/components/recent-frames";
 import TrendingFrames from "@/components/trending-frames";
 import TrendingIntervalSelect from "@/components/trending-interval-select";
