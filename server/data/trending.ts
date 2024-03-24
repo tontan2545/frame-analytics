@@ -1,20 +1,20 @@
 import sql from "../lib/postgres";
 
-export const getTrendingFrames = async () => {
+export const getTrendingFrames = async (hour: number = 24) => {
   const trendingFrames: FrameRowWithStats[] = await sql`
-    SELECT DISTINCT ON (sub.hash) sub.hash, sub.author, sub.embeds, sub.frames, sub.timestamp, sub.text, sub.likes, sub.replies, sub.recasts
-    FROM (
-        SELECT frames.hash, frames.author, frames.embeds, frames.frames, frames.timestamp, frames.text, stats.likes, stats.replies, stats.recasts
-        FROM frames
-        JOIN stats ON frames.hash = stats.hash
-        WHERE frames.timestamp > NOW() - INTERVAL '1 day'
-        AND frames.frames IS NOT NULL
-        ORDER BY stats.likes + stats.replies + stats.recasts DESC
-        LIMIT 20
-    ) AS sub
-    ORDER BY sub.hash, sub.likes + sub.replies + sub.recasts DESC
-    LIMIT 5
-    `;
+  SELECT DISTINCT ON (sub.hash) sub.hash, sub.author, sub.embeds, sub.frames, sub.timestamp, sub.text, sub.likes, sub.replies, sub.recasts
+  FROM (
+      SELECT frames.hash, frames.author, frames.embeds, frames.frames, frames.timestamp, frames.text, stats.likes, stats.replies, stats.recasts
+      FROM frames
+      JOIN stats ON frames.hash = stats.hash
+      WHERE frames.timestamp > NOW() - INTERVAL '1 hour' * ${hour}
+      AND frames.frames IS NOT NULL
+      ORDER BY stats.likes + stats.replies + stats.recasts DESC
+      LIMIT 20
+  ) AS sub
+  ORDER BY sub.hash, sub.likes + sub.replies + sub.recasts DESC
+  LIMIT 5
+  `;
 
   const response = [];
   for (const frame of trendingFrames) {
