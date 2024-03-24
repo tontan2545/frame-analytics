@@ -7,7 +7,6 @@ type Props = {
 };
 
 const TrendingIntervalSelect = ({ interval }: Props) => {
-  console.log(interval);
   return (
     <div className="border-border p-1 rounded-full border-2 w-96 h-10 flex gap-1">
       <Link href="/" className="h-full w-full">
