@@ -32,7 +32,7 @@ const FramePreview = ({
       variant="ghost"
       className="relative block max-w-full h-full p-0 rounded-lg overflow-clip aspect-video hover:bg-accent/40"
     >
-      <Link href={`/${hash}`} className="w-max h-max">
+      <Link href={`/${hash}`} className="w-max h-max" prefetch>
         <img
           src={imgUrl}
           alt={hash}
