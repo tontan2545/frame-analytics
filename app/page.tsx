@@ -5,12 +5,19 @@ import TrendingFrames from "@/components/trending-frames";
 import TrendingIntervalSelect from "@/components/trending-interval-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Clock, Flame } from "lucide-react";
+import { Metadata } from "next";
 import { Suspense } from "react";
 
 type Props = {
   searchParams: {
     interval?: string;
   };
+};
+
+export const metadata: Metadata = {
+  title: "Frame analytics",
+  description:
+    "Discover curated frames from the community, view insights, and get inspired.",
 };
 
 export default async function Home({ searchParams: { interval } }: Props) {
