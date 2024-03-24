@@ -1,7 +1,8 @@
+import RecentFrames from "@/components/recent-frames";
 import TrendingFrames from "@/components/trending-frames";
 import TrendingIntervalSelect from "@/components/trending-interval-select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Flame } from "lucide-react";
+import { Clock, Flame } from "lucide-react";
 import { Suspense } from "react";
 
 type Props = {
@@ -41,7 +42,7 @@ export default async function Home({ searchParams: { interval } }: Props) {
             <Suspense
               fallback={
                 <>
-                  {Array.from({ length: 6 }).map(() => (
+                  {Array.from({ length: 9 }).map(() => (
                     <Skeleton
                       key="trending-skeleton"
                       className="w-full h-60 rounded-md"
@@ -51,6 +52,28 @@ export default async function Home({ searchParams: { interval } }: Props) {
               }
             >
               <TrendingFrames interval={interval} />
+            </Suspense>
+          </div>
+        </div>
+        <div className="space-y-12">
+          <div className="flex gap-2 items-center">
+            <Clock className="size-6" />
+            <p className="text-xl font-medium">Recent</p>
+          </div>
+          <div className="grid grid-cols-3 gap-5">
+            <Suspense
+              fallback={
+                <>
+                  {Array.from({ length: 9 }).map(() => (
+                    <Skeleton
+                      key="recent-skeleton"
+                      className="w-full h-60 rounded-md"
+                    />
+                  ))}
+                </>
+              }
+            >
+              <RecentFrames />
             </Suspense>
           </div>
         </div>
