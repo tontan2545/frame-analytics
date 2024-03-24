@@ -42,6 +42,14 @@ interface FrameRow {
   timestamp: Date;
   text: string;
 }
+
+interface StatRow {
+  timestamp: Date;
+  likes: number;
+  recasts: number;
+  replies: number;
+}
+
 interface FrameRowWithStats extends FrameRow {
   likes: number;
   recasts: number;
