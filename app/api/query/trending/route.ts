@@ -1,3 +1,5 @@
+export const maxDuration = 300;
+
 import { type NextRequest } from "next/server";
 import _ from "lodash";
 import { getTrendingFrames } from "@/server/data/trending";
