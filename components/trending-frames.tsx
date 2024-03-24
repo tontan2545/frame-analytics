@@ -1,18 +1,29 @@
 import { getTrendingFrames } from "@/server/data/trending";
 import React from "react";
 import FramePreview from "./frame-preview";
-import { setTimeout } from "timers/promises";
 
-type Props = {};
+type Props = {
+  interval?: string;
+};
 
-const TrendingFrames = async (props: Props) => {
-  const trendingFrames = await getTrendingFrames();
+const TrendingFrames = async ({ interval }: Props) => {
+  const trendingFrames = await getTrendingFrames({
+    trendingLimit: 9,
+    intervalHour: interval ? parseInt(interval) : 72,
+  });
+
   return trendingFrames.map((frame) => (
     <FramePreview
       key={frame.hash}
-      title={frame.frames[0].title}
       hash={frame.hash}
+      createdAt={frame.timestamp}
       imgUrl={frame.frames[0].image}
+      profileImgUrl={frame.author.pfp_url}
+      profileName={frame.author.display_name}
+      title={frame.frames[0].title}
+      totalLikes={frame.likes}
+      totalReplies={frame.replies}
+      totalRecasts={frame.recasts}
     />
   ));
 };
