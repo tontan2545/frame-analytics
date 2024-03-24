@@ -35,9 +35,9 @@ interface Button {
 
 interface FrameRow {
   hash: string;
-  author: string; // JSON string, needs to be parsed to `Author`
-  embeds: string; // JSON string, needs to be parsed to `Embed[]`
-  frames: string; // JSON string, needs to be parsed to `Frame[]`
+  author: Author; // JSON string, needs to be parsed to `Author`
+  embeds: Embed[]; // JSON string, needs to be parsed to `Embed[]`
+  frames: Frame[]; // JSON string, needs to be parsed to `Frame[]`
   parent_hash: string | null; // Assuming it can be null
   timestamp: Date;
   text: string;

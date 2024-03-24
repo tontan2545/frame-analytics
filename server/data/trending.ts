@@ -18,9 +18,9 @@ export const getTrendingFrames = async (hour: number = 24) => {
 
   const response = [];
   for (const frame of trendingFrames) {
-    const author: Author = JSON.parse(frame.author);
-    const embeds: Embed[] = JSON.parse(frame.embeds);
-    const frames: Frame[] = JSON.parse(frame.frames);
+    const author: Author = frame.author;
+    const embeds: Embed[] = frame.embeds;
+    const frames: Frame[] = frame.frames;
     response.push({
       hash: frame.hash,
       author: author,
