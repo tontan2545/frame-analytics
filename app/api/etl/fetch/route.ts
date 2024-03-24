@@ -35,20 +35,18 @@ export async function GET(request: NextRequest) {
   const casts = filteredCasts.map((cast) => {
     return {
       hash: cast.hash, // string
-      author: JSON.stringify(
-        _.omit(cast.author, [
-          "object",
-          "custody_address",
-          "verifications",
-          "verified_addresses",
-          "active_status",
-          "viewer_context",
-          "follower_count",
-          "following_count",
-        ])
-      ), // JSON
-      embeds: JSON.stringify(cast.embeds), // JSON
-      frames: JSON.stringify(cast.frames), // JSON
+      author: _.omit(cast.author, [
+        "object",
+        "custody_address",
+        "verifications",
+        "verified_addresses",
+        "active_status",
+        "viewer_context",
+        "follower_count",
+        "following_count",
+      ]) as any, // JSON
+      embeds: cast.embeds as any[], // JSON
+      frames: cast.frames as any[], // JSON
       parent_hash: cast.parent_hash, // string | null
       timestamp: cast.timestamp, // string
       text: cast.text, // string
