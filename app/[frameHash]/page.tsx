@@ -1,3 +1,6 @@
+// revalidate every hour
+export const revalidate = 3600;
+
 import React from "react";
 import { Heart, MessageSquare, Repeat2 } from "lucide-react";
 
@@ -8,7 +11,6 @@ import AggregateCard from "@/components/aggregate-card";
 import { cn, timeAgo } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { setTimeout } from "timers/promises";
 
 type Props = {
   params: {
@@ -17,7 +19,6 @@ type Props = {
 };
 
 const Page = async ({ params: { frameHash } }: Props) => {
-  await setTimeout(5000);
   const frameData = await getFrameDataByHash(frameHash);
   const historicalData = (await getHistoricalStats(frameHash)).map((data) => ({
     ...data,
